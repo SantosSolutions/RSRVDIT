@@ -1,16 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSRVD IT — Santos | IT Operations & Emerging Tech</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;300;400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
 
-<html>
-    <h1>
-        Hey, I'm NetworkChuck
-    </h1>
-    <body>
-        <h2>About me</h2>
-        <p>
-            I am a coffee addict who makes vidoes sometimes.
+  :root {
+    --black: #05080f;
+    --deep: #0a1020;
+    --green: #00ff88;
+    --green2: #00cc6a;
+    --green-dim: rgba(0,255,136,0.08);
+    --green-glow: rgba(0,255,136,0.15);
+    --white: #ddeeff;
+    --muted: #6a8aaa;
+    --card-bg: rgba(10,18,38,0.6);
+    --card-border: rgba(0,255,136,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Exo 2', sans-serif;
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* ── BACKGROUND GRID ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 20%, rgba(0,255,136,0.03) 0%, transparent 70%),
+      linear-gradient(rgba(0,255,136,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.015) 1px, transparent 1px);
+    background-size: 100% 100%, 60px 60px, 60px 60px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── SPEED STREAKS ── */
+  .streak { 
+    position:fixed; left:-200px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--green),transparent);
+    opacity:0; animation:streak linear infinite; z-index:0; pointer-events:none;
+  }
+  .streak:nth-child(1){ top:12%; width:120px; animation-duration:6s; animation-delay:0s; }
+  .streak:nth-child(2){ top:38%; width:80px;  animation-duration:7s; animation-delay:2s; }
+  .streak:nth-child(3){ top:65%; width:160px; animation-duration:5s; animation-delay:3.5s; }
+  .streak:nth-child(4){ top:85%; width:100px; animation-duration:8s; animation-delay:1s; }
+
+  /* ── CORNER ACCENTS ── */
+  .corner { position: fixed; opacity: .35; z-index:1; pointer-events:none; }
+  .tl { top:0; left:0; }
+  .br { bottom:0; right:0; transform:rotate(180deg); }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top:0; left:0; right:0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 40px;
+    background: rgba(5,8,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    animation: fadeDown 0.6s ease both;
+  }
+  .nav-brand {
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 4px;
+    color: var(--white);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .nav-brand span { color: var(--green); }
+  .nav-links { display:flex; gap:28px; }
+  .nav-links a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s, text-shadow 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px;
+    background:var(--green); transition:width 0.3s;
+  }
+  .nav-links a:hover { color:var(--green); text-shadow:0 0 12px rgba(0,255,136,0.3); }
+  .nav-links a:hover::after { width:100%; }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative; z-index:1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative; z-index:1;
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 5px;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+  .hero-eyebrow .cursor {
+    display:inline-block; width:2px; height:14px;
+    background:var(--green); margin-left:4px;
+    vertical-align:middle;
+    animation: blink 1s step-end infinite;
+  }
+
+  .hero h1 {
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 8px;
+    animation: fadeUp 0.8s ease 0.35s both;
+  }
+  .hero h1 .accent { color: var(--green); }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 540px;
+    margin-top: 16px;
+    animation: fadeUp 0.8s ease 0.5s both;
+  }
+  .hero-sub strong { color: var(--white); font-weight: 600; }
+
+  .hero-rule {
+    width: 80px; height:2px;
+    background: linear-gradient(90deg, var(--green), transparent);
+    margin: 32px 0;
+    animation: fadeUp 0.8s ease 0.6s both;
+  }
+
+  .hero-tags {
+    display:flex; flex-wrap:wrap; gap:10px;
+    animation: fadeUp 0.8s ease 0.7s both;
+  }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--green2);
+    padding: 6px 14px;
+    border: 1px solid var(--card-border);
+    border-radius: 2px;
+    background: var(--green-dim);
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .tag:hover {
+    background: rgba(0,255,136,0.15);
+    border-color: rgba(0,255,136,0.35);
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 40px;
+  }
+  .section-header h2 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+  .section-header .line {
+    flex:1; height:1px;
+    background: linear-gradient(90deg, var(--card-border), transparent);
+  }
+
+  /* ── ABOUT ── */
+  #about { padding-top: 100px; padding-bottom: 80px; }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .about-text {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.85;
+    grid-column: 1 / -1;
+    max-width: 700px;
+  }
+  .about-text strong { color: var(--white); font-weight: 600; }
+
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    padding: 28px 24px;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    position:relative; overflow:hidden;
+  }
+  .stat-card::before {
+    content:''; position:absolute; top:0; left:0; width:3px; height:100%;
+    background: var(--green); opacity:0; transition:opacity 0.3s;
+  }
+  .stat-card:hover {
+    border-color: rgba(0,255,136,0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,255,136,0.06);
+  }
+  .stat-card:hover::before { opacity:1; }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .stat-value .unit {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--green);
+    margin-left: 4px;
+  }
+  .stat-detail {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* ── WORKING ON ── */
+  #projects { padding-top: 40px; padding-bottom: 80px; }
+
+  .project-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .project-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    position: relative;
+  }
+  .project-card:hover {
+    border-color: rgba(0,255,136,0.3);
+    transform: translateX(4px);
+    box-shadow: 0 4px 24px rgba(0,255,136,0.05);
+  }
+
+  .project-icon {
+    width: 48px; height:48px;
+    display:flex; align-items:center; justify-content:center;
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    background: var(--green-dim);
+    font-size: 20px;
+    flex-shrink:0;
+  }
+
+  .project-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .project-desc {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .project-tags {
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin-top: 12px;
+  }
+  .project-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--green2);
+    padding: 3px 10px;
+    border: 1px solid rgba(0,255,136,0.1);
+    border-radius: 2px;
+    background: rgba(0,255,136,0.04);
+  }
+
+  /* ── TOOLKIT ── */
+  #toolkit { padding-top: 40px; padding-bottom: 80px; }
+
+  .toolkit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .tool-item {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s;
+    cursor: default;
+  }
+  .tool-item:hover {
+    border-color: rgba(0,255,136,0.3);
+    background: rgba(0,255,136,0.04);
+    transform: translateY(-2px);
+  }
+  .tool-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .tool-cat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index:1;
+    text-align: center;
+    padding: 60px 32px 40px;
+    border-top: 1px solid var(--card-border);
+  }
+  .footer-brand {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    color: var(--white);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .footer-brand span { color: var(--green); }
+  .footer-tagline {
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+  .footer-copy {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(106,138,170,0.4);
+    margin-top: 24px;
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── KEYFRAMES ── */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(16px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  @keyframes fadeDown {
+    from { opacity:0; transform:translateY(-10px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  @keyframes blink {
+    0%,100% { opacity:1; }
+    50% { opacity:0; }
+  }
+  @keyframes streak {
+    0%   { left:-200px; opacity:0; }
+    8%   { opacity:.25; }
+    92%  { opacity:.15; }
+    100% { left:110vw; opacity:0; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    nav { padding: 14px 20px; }
+    .nav-links { gap: 16px; }
+    .nav-links a { font-size: 10px; letter-spacing: 1px; }
+    .hero { padding: 0 20px; }
+    section { padding-left:20px; padding-right:20px; }
+    .about-grid { grid-template-columns: 1fr; }
+    .project-card { grid-template-columns: 1fr; }
+    .project-icon { display:none; }
+    .toolkit-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Ambient streaks -->
+<div class="streak"></div>
+<div class="streak"></div>
+<div class="streak"></div>
+<div class="streak"></div>
+
+<!-- Corner accents -->
+<svg class="corner tl" width="60" height="60" viewBox="0 0 60 60">
+  <polyline points="0,0 50,0" fill="none" stroke="#00ff88" stroke-width="1.5"/>
+  <polyline points="0,0 0,50" fill="none" stroke="#00ff88" stroke-width="1.5"/>
+  <rect x="0" y="0" width="4" height="4" fill="#00ff88"/>
+</svg>
+<svg class="corner br" width="60" height="60" viewBox="0 0 60 60">
+  <polyline points="0,0 50,0" fill="none" stroke="#00ff88" stroke-width="1.5"/>
+  <polyline points="0,0 0,50" fill="none" stroke="#00ff88" stroke-width="1.5"/>
+  <rect x="0" y="0" width="4" height="4" fill="#00ff88"/>
+</svg>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand"><span>RSR</span>VD<span>.</span>IT</a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#toolkit">Toolkit</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">
+    ~/santos<span class="cursor"></span>
+  </div>
+  <h1>
+    IT Ops<span class="accent">.</span><br>
+    AI Forward<span class="accent">.</span>
+  </h1>
+  <p class="hero-sub">
+    <strong>Santos</strong> — IT operations professional, 
+    recognized AI Champion, and relentless tinkerer building the bridge between 
+    enterprise IT and emerging technology.
+  </p>
+  <div class="hero-rule"></div>
+  <div class="hero-tags">
+    <span class="tag">M365 Admin</span>
+    <span class="tag">AI Integration</span>
+    <span class="tag">Home Lab</span>
+    <span class="tag">Security</span>
+    <span class="tag">Automation</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header reveal">
+    <h2>About</h2>
+    <div class="line"></div>
+  </div>
+
+  <p class="about-text reveal">
+    I'm a <strong>coffee-fueled IT professional</strong> who thrives at the intersection of 
+    operations and innovation. By day, I manage Microsoft 365 environments, wrangle ticketing 
+    systems, and keep infrastructure humming. By night, I'm deep in my home lab — 
+    running Raspberry Pis, spinning up Docker containers, and pushing the limits of what 
+    AI can do for everyday workflows. I earned an <strong>AI Champion award</strong> 
+    for integrating Claude into daily operations, and I haven't slowed down since.
+  </p>
+
+  <div class="about-grid" style="margin-top:32px;">
+    <div class="stat-card reveal">
+      <div class="stat-label">Current Role</div>
+      <div class="stat-value" style="font-size:20px;">IT Operations</div>
+      <div class="stat-detail">M365 · ConnectWise · Infrastructure</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-label">Recognition</div>
+      <div class="stat-value" style="font-size:20px;">AI Champion</div>
+      <div class="stat-detail">Claude-powered workflow innovation</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-label">Growing Into</div>
+      <div class="stat-value" style="font-size:20px;">Data & Security</div>
+      <div class="stat-detail">Data Engineer Academy · CPTS</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-label">Home Lab</div>
+      <div class="stat-value" style="font-size:20px;">Always On</div>
+      <div class="stat-detail">Pi-hole · Ollama · Twingate · Docker</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <h2>What I'm Working On</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="project-cards">
+    <div class="project-card reveal">
+      <div class="project-icon">🤖</div>
+      <div>
+        <div class="project-title">AI-Powered IT Workflows</div>
+        <p class="project-desc">
+          Integrating Claude across daily operations — from documentation and ticket 
+          management to process automation. Building the case for AI as a force multiplier 
+          in enterprise IT.
         </p>
-        <h2>What I'm working on</h2>
-        <p>
-            I'm obsessed with AI right now and I'm working on the CPTS from HTB.
+        <div class="project-tags">
+          <span class="project-tag">Claude</span>
+          <span class="project-tag">Automation</span>
+          <span class="project-tag">ConnectWise</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-icon">🔐</div>
+      <div>
+        <div class="project-title">CPTS — Hack The Box</div>
+        <p class="project-desc">
+          Pursuing the Certified Penetration Testing Specialist certification. 
+          Deepening offensive security skills to complement my operations background 
+          and transition into security-focused roles.
         </p>
-    </body>
+        <div class="project-tags">
+          <span class="project-tag">Pentesting</span>
+          <span class="project-tag">HTB</span>
+          <span class="project-tag">Security</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-icon">🏗️</div>
+      <div>
+        <div class="project-title">Home Lab Infrastructure</div>
+        <p class="project-desc">
+          A constantly evolving playground — Raspberry Pi cluster running Pi-hole, 
+          Ollama for local LLMs, Twingate for secure remote access, and Docker 
+          for everything in between.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">Raspberry Pi</span>
+          <span class="project-tag">Docker</span>
+          <span class="project-tag">Twingate</span>
+          <span class="project-tag">Ollama</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-icon">📊</div>
+      <div>
+        <div class="project-title">Data Engineering Track</div>
+        <p class="project-desc">
+          Enrolled in a Data Engineer Academy program, building skills in data 
+          pipelines, SQL, and analytics to expand my career path beyond traditional 
+          IT operations.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">Data Engineering</span>
+          <span class="project-tag">SQL</span>
+          <span class="project-tag">Python</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLKIT -->
+<section id="toolkit">
+  <div class="section-header reveal">
+    <h2>Toolkit</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="toolkit-grid">
+    <div class="tool-item reveal">
+      <div class="tool-name">Microsoft 365</div>
+      <div class="tool-cat">Administration</div>
+    </div>
+    <div class="tool-item reveal">
+      <div class="tool-name">ConnectWise</div>
+      <div class="tool-cat">Ticketing</div>
+    </div>
+    <div class="tool-item reveal">
+      <div class="tool-name">Claude AI</div>
+      <div class="tool-cat">AI Workflows</div>
+    </div>
+    <div class="tool-item reveal">
+      <div class="tool-name">Docker</div>
+      <div class="tool-cat">Containers</div>
+    </div>
+    <div class="tool-item reveal">
+      <div class="tool-name">Raspberry Pi</div>
+      <div class="tool-cat">Home Lab</div>
+    </div>
+    <div class="tool-item reveal">
+      <div class="tool-name">Pi-hole</div>
+      <div class="tool-cat">DNS / Filtering</div>
+    </div>
+    <div class="tool-item reveal">
+      <div class="tool-name">Twingate</div>
+      <div class="tool-cat">Zero Trust</div>
+    </div>
+    <div class="tool-item reveal">
+      <div class="tool-name">Python</div>
+      <div class="tool-cat">Scripting</div>
+    </div>
+    <div class="tool-item reveal">
+      <div class="tool-name">PowerShell</div>
+      <div class="tool-cat">Automation</div>
+    </div>
+    <div class="tool-item reveal">
+      <div class="tool-name">Ollama</div>
+      <div class="tool-cat">Local LLMs</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand"><span>RSR</span>VD<span>.</span>IT</div>
+  <div class="footer-tagline">Calm &nbsp;·&nbsp; Sharp &nbsp;·&nbsp; Reliable</div>
+  <div class="footer-copy">© 2025 Santos — Built with intention</div>
+</footer>
+
+<!-- Scroll reveal script -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        // Stagger sibling reveals
+        const parent = entry.target.parentElement;
+        const siblings = parent ? Array.from(parent.querySelectorAll('.reveal')) : [];
+        const idx = siblings.indexOf(entry.target);
+        const delay = idx >= 0 ? idx * 80 : 0;
+        
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, delay);
+        
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
 </html>
